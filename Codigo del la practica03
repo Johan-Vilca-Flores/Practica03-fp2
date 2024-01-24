@@ -1,0 +1,82 @@
+package practica03;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
+public class TableroJuego extends JFrame {
+
+    private static final Map<Color, Color> colorCache = new HashMap<>();
+
+    private static Color getSharedColor(Color color) {
+        return colorCache.computeIfAbsent(color, c -> new Color(c.getRGB()));
+    }
+
+    public TableroJuego() {
+        setTitle("Tablero de Juego");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(600, 600);  // Aumenté el tamaño del tablero para dar espacio a los botones
+        setLayout(new BorderLayout());
+
+        JPanel tableroPanel = new JPanel();
+        tableroPanel.setLayout(new GridLayout(10, 10));
+
+        Random random = new Random();
+
+        for (int i = 0; i < 100; i++) {
+            Color color = random.nextBoolean() ? Color.WHITE : Color.RED;
+            JPanel panel = new JPanel();
+            panel.setBackground(getSharedColor(color));
+            panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            tableroPanel.add(panel);
+        }
+
+        add(tableroPanel, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout());
+
+        JButton guardarButton = new JButton("Guardar");
+        guardarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Lógica para guardar
+                JOptionPane.showMessageDialog(TableroJuego.this, "Partida guardada");
+            }
+        });
+
+        JButton salirButton = new JButton("Salir");
+        salirButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
+        JButton jugarButton = new JButton("Jugar");
+        // Agregar lógica para el botón Jugar según tus necesidades
+
+        JButton cancelarButton = new JButton("Cancelar");
+        // Agregar lógica para el botón Cancelar según tus necesidades
+
+        buttonPanel.add(guardarButton);
+        buttonPanel.add(salirButton);
+        buttonPanel.add(jugarButton);
+        buttonPanel.add(cancelarButton);
+
+        add(buttonPanel, BorderLayout.SOUTH);
+
+        setVisible(true);
+
+        long memoryUsed = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        System.out.println("Memoria utilizada: " + memoryUsed + " bytes");
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new TableroJuego());
+    }
+}
